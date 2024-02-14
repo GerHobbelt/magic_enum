@@ -22,6 +22,7 @@ endif()
 option(MAGIC_ENUM_OPT_BUILD_EXAMPLES "Build magic_enum examples" ${IS_TOPLEVEL_PROJECT})
 option(MAGIC_ENUM_OPT_BUILD_TESTS "Build and perform magic_enum tests" ${IS_TOPLEVEL_PROJECT})
 option(MAGIC_ENUM_OPT_INSTALL "Generate and install magic_enum target" ${IS_TOPLEVEL_PROJECT})
+option(MAGIC_ENUM_OPT_INSTALL_PACKAGE "Generate and install magic_enum target" ${IS_TOPLEVEL_PROJECT})
 
 if(MAGIC_ENUM_OPT_BUILD_EXAMPLES)
     add_subdirectory(example)
@@ -64,7 +65,7 @@ if(MAGIC_ENUM_OPT_INSTALL)
         file(RELATIVE_PATH headerFileRelParentDir "${INCLUDES}" "${headerFileParentDir}")
 
         install(FILES "${headerFile}"
-            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${headerFileRelParentDir}"
+            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/magic_enum/${headerFileRelParentDir}"
         )
     endforeach()
 
@@ -123,7 +124,9 @@ if(MAGIC_ENUM_OPT_INSTALL)
         INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}"
     )
 
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/package.xml
-            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
-    include(CPack)
+    if (MAGIC_ENUM_OPT_INSTALL_PACKAGE)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/package.xml
+                DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
+        include(CPack)
+    endif()
 endif()
