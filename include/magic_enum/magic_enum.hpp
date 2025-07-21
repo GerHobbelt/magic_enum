@@ -65,8 +65,13 @@
 #if defined(MAGIC_ENUM_NO_ASSERT)
 #  define MAGIC_ENUM_ASSERT(...) static_cast<void>(0)
 #elif !defined(MAGIC_ENUM_ASSERT)
-# if defined(LIBASSERT_INVOKE)
-#  define MAGIC_ENUM_ASSERT(expr, ...) LIBASSERT_INVOKE(expr, "MAGIC_ENUM_ASSERT", magic_enum_assertion, , __VA_ARGS__)
+# if defined(LIBASSERT_USE_MAGIC_ENUM) || (defined(__has_include) && __has_include(<libassert/config.h>))
+#include <libassert/config.h>
+#include <libassert/platform.hpp>
+#include <libassert/utilities.hpp>
+#include <libassert/precursor_macros.hpp>
+
+#  define MAGIC_ENUM_ASSERT(expr, ...) LIBASSERT_INVOKE(expr, "MAGIC_ENUM_ASSERT", assertion, /* empty action */ __VA_OPT__(,) __VA_ARGS__)
 # else
 #  include <cassert>
 #  define MAGIC_ENUM_ASSERT(...) assert((__VA_ARGS__))
