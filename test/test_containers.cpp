@@ -313,3 +313,7 @@ TEST_CASE("map_like_container") {
     std::cout << "Key=" << key << " Value=" << value << std::endl;
   }
 }
+
+#if defined(_MSC_VER)
+#  pragma warning(pop)
+#endif
