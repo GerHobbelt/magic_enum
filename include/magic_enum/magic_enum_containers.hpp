@@ -368,12 +368,14 @@ struct array {
 
   [[nodiscard]] constexpr reference operator[](E pos) {
     auto i = index_type::at(pos);
-    return MAGIC_ENUM_ASSERT(i), a[*i];
+	MAGIC_ENUM_ASSERT(i);
+    return a[*i];
   }
 
   [[nodiscard]] constexpr const_reference operator[](E pos) const {
     auto i = index_type::at(pos);
-    return MAGIC_ENUM_ASSERT(i), a[*i];
+	MAGIC_ENUM_ASSERT(i);
+    return a[*i];
   }
 
   [[nodiscard]] constexpr reference front() noexcept { return a.front(); }
@@ -641,12 +643,14 @@ class bitset {
 
   [[nodiscard]] constexpr bool operator[](E pos) const {
     auto i = index_type::at(pos);
-    return MAGIC_ENUM_ASSERT(i), static_cast<bool>(const_reference(this, *i));
+	MAGIC_ENUM_ASSERT(i);
+    return static_cast<bool>(const_reference(this, *i));
   }
 
   [[nodiscard]] constexpr reference operator[](E pos) {
     auto i = index_type::at(pos);
-    return MAGIC_ENUM_ASSERT(i), reference{this, *i};
+	MAGIC_ENUM_ASSERT(i);
+    return reference{this, *i};
   }
 
   constexpr bool test(E pos) const {
