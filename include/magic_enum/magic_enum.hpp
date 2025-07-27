@@ -71,7 +71,7 @@
 #include <libassert/utilities.hpp>
 #include <libassert/precursor_macros.hpp>
 
-#  define MAGIC_ENUM_ASSERT(expr, ...) LIBASSERT_INVOKE(expr, "MAGIC_ENUM_ASSERT", assertion, /* empty action */ __VA_OPT__(,) __VA_ARGS__)
+#  define MAGIC_ENUM_ASSERT(...) LIBASSERT_INVOKE((__VA_ARGS__), "MAGIC_ENUM_ASSERT", assertion, /* empty action */)
 # else
 #  include <cassert>
 #  define MAGIC_ENUM_ASSERT(...) assert((__VA_ARGS__))
@@ -451,7 +451,7 @@ constexpr I log2(I value) noexcept {
   static_assert(std::is_integral_v<I>, "magic_enum::detail::log2 requires integral type.");
 
   if constexpr (std::is_same_v<I, bool>) { // bool special case
-    MAGIC_ENUM_ASSERT(false);
+    MAGIC_ENUM_ASSERT(false && "Should never get here!");
     return value;
   } else {
     auto ret = I{0};
