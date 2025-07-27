@@ -36,7 +36,12 @@ struct magic_enum::customize::enum_range<Color> {
   static constexpr bool is_flags = true;
 };
 
-int main() {
+#if defined(BUILD_MONOLITHIC)
+#define main MagicEnum_containers_bitset_example_main
+#endif
+
+extern "C"
+int main(void) {
 
   auto color_bitset = magic_enum::containers::bitset<Color>();
   color_bitset.set(Color::GREEN);

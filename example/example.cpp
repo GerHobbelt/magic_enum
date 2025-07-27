@@ -33,7 +33,12 @@ auto to_integer(magic_enum::Enum<E> value) {
   return static_cast<magic_enum::underlying_type_t<E>>(value);
 }
 
-int main() {
+#if defined(BUILD_MONOLITHIC)
+#define main MagicEnum_basic_example_main
+#endif
+
+extern "C"
+int main(void) {
   // Enum variable to string name.
   Color c1 = Color::RED;
   auto c1_name = magic_enum::enum_name(c1);

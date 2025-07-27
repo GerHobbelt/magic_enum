@@ -49,7 +49,12 @@ struct RGB {
 
 constexpr std::uint8_t color_max = std::numeric_limits<std::uint8_t>::max();
 
-int main() {
+#if defined(BUILD_MONOLITHIC)
+#define main MagicEnum_containers_array_example_main
+#endif
+
+extern "C"
+int main(void) {
 
   constexpr magic_enum::containers::array<Color, RGB> color_rgb_initializer {{{{color_max, 0, 0}, {0, color_max, 0}, {0, 0, color_max}}}};
 

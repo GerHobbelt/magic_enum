@@ -32,7 +32,12 @@ enum class Language : int {
     😃 = 40,
 };
 
-int main() {
+#if defined(BUILD_MONOLITHIC)
+#define main MagicEnum_nonascii_name_example_main
+#endif
+
+extern "C"
+int main(void) {
   std::cout << magic_enum::enum_name(Language::日本語) << std::endl; // Japanese
   std::cout << magic_enum::enum_name(Language::한국어) << std::endl; // Korean
   std::cout << magic_enum::enum_name(Language::English) << std::endl; // English

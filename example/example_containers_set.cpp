@@ -36,7 +36,12 @@ struct magic_enum::customize::enum_range<Color> {
   static constexpr bool is_flags = true;
 };
 
-int main() {
+#if defined(BUILD_MONOLITHIC)
+#define main MagicEnum_containers_set_example_main
+#endif
+
+extern "C"
+int main(void) {
 
   std::cout << std::boolalpha;
   magic_enum::containers::set color_set {Color::RED, Color::GREEN, Color::BLUE};

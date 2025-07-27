@@ -33,7 +33,12 @@ struct magic_enum::customize::enum_range<AnimalFlags> {
   static constexpr bool is_flags = true;
 };
 
-int main() {
+#if defined(BUILD_MONOLITHIC)
+#define main MagicEnum_enum_flag_example_main
+#endif
+
+extern "C"
+int main(void) {
   // Enum-flags variable to string name.
   AnimalFlags f1 = AnimalFlags::Endangered;
   auto f1_name = magic_enum::enum_name(f1);

@@ -55,7 +55,12 @@ constexpr magic_enum::customize::customize_t magic_enum::customize::enum_name<Nu
   }
 }
 
-int main() {
+#if defined(BUILD_MONOLITHIC)
+#define main MagicEnum_custom_name_example_main
+#endif
+
+extern "C"
+int main(void) {
   std::cout << magic_enum::enum_name(Color::RED) << std::endl; // 'the red color'
   std::cout << magic_enum::enum_name(Color::BLUE) << std::endl; // 'The BLUE'
   std::cout << magic_enum::enum_name(Color::GREEN) << std::endl; // ''

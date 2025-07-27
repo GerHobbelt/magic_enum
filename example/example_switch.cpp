@@ -45,7 +45,12 @@ constexpr std::string_view DoWork<Color::GREEN>() {
 template <typename... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template <typename... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
-int main() {
+#if defined(BUILD_MONOLITHIC)
+#define main MagicEnum_enum_switch_example_main
+#endif
+
+extern "C"
+int main(void) {
   Color c = Color::RED;
 
   auto lambda = [] (auto value) {
