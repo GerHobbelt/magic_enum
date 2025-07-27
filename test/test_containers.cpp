@@ -37,6 +37,8 @@
 #include <magic_enum/magic_enum_iostream.hpp>
 
 #include <functional>
+#include <algorithm>
+#include <iostream>
 
 enum class Color { RED = 1, GREEN = 2, BLUE = 4 };
 template <>
@@ -311,3 +313,7 @@ TEST_CASE("map_like_container") {
     std::cout << "Key=" << key << " Value=" << value << std::endl;
   }
 }
+
+#if defined(_MSC_VER)
+#  pragma warning(pop)
+#endif

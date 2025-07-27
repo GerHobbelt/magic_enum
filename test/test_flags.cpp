@@ -832,3 +832,7 @@ TEST_CASE("enum_prev_value_circular") {
   REQUIRE(enum_prev_value_circular(Color::RED, -3) == Color::RED);
   REQUIRE(enum_prev_value_circular(Color::RED, -4) == Color::GREEN);
 }
+
+#if defined(_MSC_VER)
+#  pragma warning(pop)
+#endif
