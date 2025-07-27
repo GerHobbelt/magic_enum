@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 #include <iostream>
+#include <cassert>
 
 #define MAGIC_ENUM_ENABLE_HASH
 #include <magic_enum/magic_enum_switch.hpp>
