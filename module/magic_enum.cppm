@@ -22,7 +22,7 @@ extern "C++" {
 #pragma clang diagnostic ignored "-Winclude-angled-in-module-purview"
 #elif defined(_MSC_VER)
 #pragma warning(push)
-#pragma warning(disable:5244)
+#pragma warning(disable : 5244)
 #endif
 
 #include <magic_enum/magic_enum_all.hpp>
