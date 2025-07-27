@@ -24,7 +24,9 @@
 #include <iostream>
 #include <cassert>
 
+#if 0
 #define MAGIC_ENUM_ENABLE_HASH
+#endif
 #include <magic_enum/magic_enum_switch.hpp>
 
 enum class Color { RED, BLUE, GREEN };
