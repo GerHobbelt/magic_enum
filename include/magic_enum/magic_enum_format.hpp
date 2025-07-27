@@ -69,7 +69,10 @@ struct std::formatter<E, std::enable_if_t<std::is_enum_v<std::decay_t<E>>, char>
 
 #endif
 
-#if defined(FMT_VERSION)
+// error C2752: 'fmt::formatter<magic_enum::detail::typesafe_fuse_enum::enum_fuse_t,char,void>': more than one partial specialization matches the template argument list
+// message: could be 'fmt::formatter<T,Char,void_t_impl<std::remove_cv<std::remove_reference<unknown-type>::type>::type>::type>'
+// message: or       'fmt::formatter<E,enable_if<std::is_enum_v<decay<_Ty>::type>,char>::type,void>'
+#if defined(FMT_VERSION) && 0
 
 template <typename E>
 struct fmt::formatter<E, std::enable_if_t<std::is_enum_v<std::decay_t<E>>, char>> : fmt::formatter<std::string_view, char> {
