@@ -81,7 +81,8 @@ template <typename... Es>
 #else
   const auto fuse = detail::typesafe_fuse_enum<std::decay_t<Es>...>(values...);
 #endif
-  return MAGIC_ENUM_ASSERT(fuse), fuse;
+  MAGIC_ENUM_ASSERT(fuse);
+  return fuse;
 }
 
 } // namespace magic_enum
