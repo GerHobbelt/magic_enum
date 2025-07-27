@@ -20,11 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE  OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#define MAGIC_ENUM_USING_ALIAS_STRING_VIEW using string_view = std::wstring_view;
+#define MAGIC_ENUM_USING_ALIAS_STRING      using string      = std::wstring;
+
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
 
-#define MAGIC_ENUM_USING_ALIAS_STRING_VIEW using string_view = std::wstring_view;
-#define MAGIC_ENUM_USING_ALIAS_STRING      using string      = std::wstring;
 #include <magic_enum/magic_enum.hpp>
 #include <magic_enum/magic_enum_iostream.hpp>
 
@@ -48,7 +49,7 @@ using namespace magic_enum;
 
 static_assert(is_magic_enum_supported, "magic_enum: Unsupported compiler (https://github.com/Neargye/magic_enum#compiler-compatibility).");
 
-TEST_CASE("enum_cast") {
+TEST_CASE("wchar:enum_cast") {
   SECTION("string") {
     constexpr auto cr = enum_cast<Color>(L"red");
     REQUIRE(cr.value() == Color::RED);
@@ -67,19 +68,19 @@ TEST_CASE("enum_cast") {
   }
 }
 
-TEST_CASE("enum_values") {
+TEST_CASE("wchar:enum_values") {
   REQUIRE(std::is_same_v<decltype(enum_values<Color>()), const std::array<Color, 3>&>);
 
   constexpr auto& s1 = enum_values<Color&>();
   REQUIRE(s1 == std::array<Color, 3>{{Color::RED, Color::GREEN, Color::BLUE}});
 }
 
-TEST_CASE("enum_count") {
+TEST_CASE("wchar:enum_count") {
   constexpr auto s1 = enum_count<Color&>();
   REQUIRE(s1 == 3);
 }
 
-TEST_CASE("enum_name") {
+TEST_CASE("wchar:enum_name") {
   SECTION("automatic storage") {
     constexpr Color cr = Color::RED;
     constexpr auto cr_name = enum_name(cr);
@@ -102,21 +103,21 @@ TEST_CASE("enum_name") {
   }
 }
 
-TEST_CASE("enum_names") {
+TEST_CASE("wchar:enum_names") {
   REQUIRE(std::is_same_v<decltype(enum_names<Color>()), const std::array<std::wstring_view, 3>&>);
 
   constexpr auto& s1 = enum_names<Color&>();
   REQUIRE(s1 == std::array<std::wstring_view, 3>{{L"red", L"GREEN", L"BLUE"}});
 }
 
-TEST_CASE("enum_entries") {
+TEST_CASE("wchar:enum_entries") {
   REQUIRE(std::is_same_v<decltype(enum_entries<Color>()), const std::array<std::pair<Color, std::wstring_view>, 3>&>);
 
   constexpr auto& s1 = enum_entries<Color&>();
   REQUIRE(s1 == std::array<std::pair<Color, std::wstring_view>, 3>{{{Color::RED, L"red"}, {Color::GREEN, L"GREEN"}, {Color::BLUE, L"BLUE"}}});
 }
 
-TEST_CASE("ostream_operators") {
+TEST_CASE("wchar:ostream_operators") {
   auto test_ostream = [](auto e, std::wstring name) {
     using namespace magic_enum::ostream_operators;
     std::wstringstream ss;
@@ -132,7 +133,7 @@ TEST_CASE("ostream_operators") {
   test_ostream(std::make_optional(static_cast<Color>(0)), L"0");
 }
 
-TEST_CASE("istream_operators") {
+TEST_CASE("wchar:istream_operators") {
   auto test_istream = [](const auto e, std::wstring name) {
     using namespace magic_enum::istream_operators;
     std::wistringstream ss(name);

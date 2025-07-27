@@ -20,13 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE  OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#define MAGIC_ENUM_RANGE_MIN -120
+#define MAGIC_ENUM_RANGE_MAX 120
+
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
 
-#undef  MAGIC_ENUM_RANGE_MIN
-#define MAGIC_ENUM_RANGE_MIN -120
-#undef  MAGIC_ENUM_RANGE_MAX
-#define MAGIC_ENUM_RANGE_MAX 120
 #include <magic_enum/magic_enum.hpp>
 #include <magic_enum/magic_enum_fuse.hpp>
 #include <magic_enum/magic_enum_iostream.hpp>
@@ -49,7 +48,7 @@ using namespace magic_enum;
 
 static_assert(is_magic_enum_supported, "magic_enum: Unsupported compiler (https://github.com/Neargye/magic_enum#compiler-compatibility).");
 
-TEST_CASE("enum_cast") {
+TEST_CASE("nonascii:enum_cast") {
   SECTION("string") {
       constexpr auto lang = enum_cast<Language>("日本語");
       REQUIRE(enum_cast<Language&>("한국어").value() == Language::한국어);
@@ -70,7 +69,7 @@ TEST_CASE("enum_cast") {
   }
 }
 
-TEST_CASE("enum_integer") {
+TEST_CASE("nonascii:enum_integer") {
     constexpr auto lang = enum_integer(Language::日本語);
     Language korean = Language::한국어;
     REQUIRE(enum_integer<Language&>(korean) == 20);
@@ -80,7 +79,7 @@ TEST_CASE("enum_integer") {
     REQUIRE(enum_integer(static_cast<Language>(0)) == 0);
 }
 
-TEST_CASE("enum_index") {
+TEST_CASE("nonascii:enum_index") {
     constexpr auto lang = enum_index<Language>(Language::日本語);
     Language korean = Language::한국어;
     REQUIRE(enum_index<Language&>(korean) == 1);
@@ -90,7 +89,7 @@ TEST_CASE("enum_index") {
     REQUIRE_FALSE(enum_index(static_cast<Language>(0)).has_value());
 }
 
-TEST_CASE("enum_contains") {
+TEST_CASE("nonascii:enum_contains") {
   SECTION("value") {
     constexpr auto lang = enum_contains(Language::日本語);
     Language korean = Language::한국어;
@@ -118,7 +117,7 @@ TEST_CASE("enum_contains") {
   }
 }
 
-TEST_CASE("enum_value") {
+TEST_CASE("nonascii:enum_value") {
     constexpr auto lang = enum_value<Language>(3);
     REQUIRE(enum_value<Language&>(0) == Language::日本語);
     REQUIRE(enum_value<const Language>(1) == Language::한국어);
@@ -126,17 +125,17 @@ TEST_CASE("enum_value") {
     REQUIRE(lang == Language::😃);
 }
 
-TEST_CASE("enum_values") {
+TEST_CASE("nonascii:enum_values") {
   constexpr auto& s7 = enum_values<const Language>();
   REQUIRE(s7 == std::array<Language, 5>{{Language::日本語, Language::한국어, Language::English, Language::😃, Language::TVÅ}});
 }
 
-TEST_CASE("enum_count") {
+TEST_CASE("nonascii:enum_count") {
   constexpr auto s7 = enum_count<Language>();
   REQUIRE(s7 == 5);
 }
 
-TEST_CASE("enum_name") {
+TEST_CASE("nonascii:enum_name") {
   SECTION("automatic storage") {
     constexpr Language lang = Language::日本語;
     constexpr auto lang_name = enum_name(lang);
@@ -159,17 +158,17 @@ TEST_CASE("enum_name") {
   }
 }
 
-TEST_CASE("enum_names") {
+TEST_CASE("nonascii:enum_names") {
   constexpr auto& s5 = enum_names<const Language>();
   REQUIRE(s5 == std::array<std::string_view, 5>{{"日本語", "한국어", "English", "😃", "TVÅ"}});
 }
 
-TEST_CASE("enum_entries") {
+TEST_CASE("nonascii:enum_entries") {
   constexpr auto& s5 = enum_entries<const Language>();
   REQUIRE(s5 == std::array<std::pair<Language, std::string_view>, 5>{{{Language::日本語, "日本語"}, {Language::한국어, "한국어"}, {Language::English, "English"}, {Language::😃, "😃"}, {Language::TVÅ, "TVÅ"}}});
 }
 
-TEST_CASE("ostream_operators") {
+TEST_CASE("nonascii:ostream_operators") {
   auto test_ostream = [](auto e, std::string name) {
     using namespace magic_enum::ostream_operators;
     std::stringstream ss;
@@ -186,7 +185,7 @@ TEST_CASE("ostream_operators") {
   test_ostream(std::make_optional(static_cast<Language>(0)), "0");
 }
 
-TEST_CASE("istream_operators") {
+TEST_CASE("nonascii:istream_operators") {
   auto test_istream = [](const auto e, std::string name) {
     using namespace magic_enum::istream_operators;
     std::istringstream ss(name);
@@ -201,7 +200,7 @@ TEST_CASE("istream_operators") {
   test_istream(Language::😃, "😃");
 }
 
-TEST_CASE("bitwise_operators") {
+TEST_CASE("nonascii:bitwise_operators") {
   using namespace magic_enum::bitwise_operators;
 
   SECTION("operator^") {
@@ -239,15 +238,15 @@ TEST_CASE("bitwise_operators") {
     REQUIRE(enum_integer(x5) == (enum_integer(Language::日本語) ^ enum_integer(Language::한국어)));
   }
 }
-TEST_CASE("type_traits") {
+TEST_CASE("nonascii:type_traits") {
   REQUIRE_FALSE(is_unscoped_enum_v<Language>);
 }
 
-TEST_CASE("enum_type_name") {
+TEST_CASE("nonascii:enum_type_name") {
   REQUIRE(enum_type_name<const Language&>() == "Language");
 }
 
-TEST_CASE("extrema") {
+TEST_CASE("nonascii:extrema") {
   SECTION("min") {
     REQUIRE(magic_enum::customize::enum_range<Language>::min == MAGIC_ENUM_RANGE_MIN);
     REQUIRE(magic_enum::detail::reflected_min<Language, as_common<>>() == MAGIC_ENUM_RANGE_MIN);

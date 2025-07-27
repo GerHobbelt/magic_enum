@@ -20,12 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE  OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#define CATCH_CONFIG_MAIN
-#include <catch2/catch.hpp>
-
 #define MAGIC_ENUM_NO_CHECK_REFLECTED_ENUM
 #define MAGIC_ENUM_RANGE_MIN -120
 #define MAGIC_ENUM_RANGE_MAX 120
+
+#include <catch2/catch.hpp>
+#include <catch2/generators/catch_generators.hpp>
+
 #include <magic_enum/magic_enum.hpp>
 #include <magic_enum/magic_enum_fuse.hpp>
 #include <magic_enum/magic_enum_iostream.hpp>

@@ -97,7 +97,7 @@ struct magic_enum::customize::enum_range<number> {
 using namespace magic_enum;
 using namespace magic_enum::bitwise_operators;
 
-TEST_CASE("enum_cast") {
+TEST_CASE("flags:enum_cast") {
   SECTION("string") {
     constexpr auto cr = enum_cast<Color>("RED");
     REQUIRE(cr.value() == Color::RED);
@@ -183,7 +183,7 @@ TEST_CASE("enum_cast") {
   }
 }
 
-TEST_CASE("enum_index") {
+TEST_CASE("flags:enum_index") {
   Color cm[3] = {Color::RED, Color::GREEN, Color::BLUE};
   constexpr auto cr = enum_index(Color::RED);
   Color cg = Color::GREEN;
@@ -219,7 +219,7 @@ TEST_CASE("enum_index") {
   REQUIRE_FALSE(enum_index(static_cast<number>(0)).has_value());
 }
 
-TEST_CASE("enum_contains") {
+TEST_CASE("flags:enum_contains") {
   SECTION("value") {
     Color cm[3] = {Color::RED, Color::GREEN, Color::BLUE};
     constexpr auto cr = enum_contains(Color::RED);
@@ -346,7 +346,7 @@ TEST_CASE("enum_contains") {
   }
 }
 
-TEST_CASE("enum_value") {
+TEST_CASE("flags:enum_value") {
   constexpr auto cr = enum_value<Color>(0);
   REQUIRE(cr == Color::RED);
   REQUIRE(enum_value<Color&>(1) == Color::GREEN);
@@ -390,7 +390,7 @@ TEST_CASE("enum_value") {
   REQUIRE(enum_value<number, 3>() == number::four);
 }
 
-TEST_CASE("enum_values") {
+TEST_CASE("flags:enum_values") {
   REQUIRE(std::is_same_v<decltype(enum_values<Color>()), const std::array<Color, 3>&>);
 
   constexpr auto& s1 = enum_values<Color&>();
@@ -406,7 +406,7 @@ TEST_CASE("enum_values") {
   REQUIRE(s4 == std::array<number, 4>{{number::one, number::two, number::three, number::four}});
 }
 
-TEST_CASE("enum_count") {
+TEST_CASE("flags:enum_count") {
   constexpr auto s1 = enum_count<Color&>();
   REQUIRE(s1 == 3);
 
@@ -420,7 +420,7 @@ TEST_CASE("enum_count") {
   REQUIRE(s4 == 4);
 }
 
-TEST_CASE("enum_name") {
+TEST_CASE("flags:enum_name") {
   SECTION("automatic storage") {
     constexpr Color cr = Color::RED;
     constexpr auto cr_name = enum_name(cr);
@@ -506,7 +506,7 @@ TEST_CASE("enum_flags_name") {
   REQUIRE(enum_flags_name(static_cast<number>(0)).empty());
 }
 
-TEST_CASE("enum_names") {
+TEST_CASE("flags:enum_names") {
   REQUIRE(std::is_same_v<decltype(enum_names<Color>()), const std::array<std::string_view, 3>&>);
 
   constexpr auto& s1 = enum_names<Color&>();
@@ -522,7 +522,7 @@ TEST_CASE("enum_names") {
   REQUIRE(s4 == std::array<std::string_view, 4>{{"one", "two", "three", "four"}});
 }
 
-TEST_CASE("enum_entries") {
+TEST_CASE("flags:enum_entries") {
   REQUIRE(std::is_same_v<decltype(enum_entries<Color>()), const std::array<std::pair<Color, std::string_view>, 3>&>);
 
   constexpr auto& s1 = enum_entries<Color&>();
@@ -538,7 +538,7 @@ TEST_CASE("enum_entries") {
   REQUIRE(s4 == std::array<std::pair<number, std::string_view>, 4>{{{number::one, "one"}, {number::two, "two"}, {number::three, "three"}, {number::four, "four"}}});
 }
 
-TEST_CASE("ostream_operators") {
+TEST_CASE("flags:ostream_operators") {
   auto test_ostream = [](auto e, std::string name) {
     using namespace magic_enum::ostream_operators;
     std::stringstream ss;
@@ -578,7 +578,7 @@ TEST_CASE("ostream_operators") {
   test_ostream(std::make_optional(static_cast<number>(0)), "0");
 }
 
-TEST_CASE("istream_operators") {
+TEST_CASE("flags:istream_operators") {
   auto test_istream = [](const auto e, std::string name) {
     using namespace magic_enum::istream_operators;
     std::istringstream ss(name);
@@ -608,7 +608,7 @@ TEST_CASE("istream_operators") {
   test_istream(number::four | number::one, "one|four");
 }
 
-TEST_CASE("bitwise_operators") {
+TEST_CASE("flags:bitwise_operators") {
   SECTION("operator^") {
     REQUIRE(enum_integer(~Color::RED) == ~enum_integer(Color::RED));
     REQUIRE(enum_integer(~Numbers::one) == ~enum_integer(Numbers::one));
@@ -710,7 +710,7 @@ constexpr void constexpr_for(F&& f) {
 template <typename E, E V>
 struct Foo {};
 
-TEST_CASE("constexpr_for") {
+TEST_CASE("flags:constexpr_for") {
   constexpr_for<0, magic_enum::enum_count<Color>(), 1>([](auto i) {
     [[maybe_unused]] Foo<Color, magic_enum::enum_value<Color, i>()> bar{};
   });
@@ -722,7 +722,7 @@ TEST_CASE("constexpr_for") {
 
 #include <magic_enum/magic_enum_format.hpp>
 
-TEST_CASE("format-base") {
+TEST_CASE("flags:format-base") {
   REQUIRE(std::format("Test-{:~^11}.", Color::RED | Color::GREEN) == "Test-~RED|GREEN~.");
 }
 
@@ -771,7 +771,7 @@ TEST_CASE("enum_flags_test_any") {
   REQUIRE(enum_flags_test(Numbers::none, Numbers::one) == enum_flags_test_any(Numbers::none, Numbers::one));
 }
 
-TEST_CASE("enum_next_value") {
+TEST_CASE("flags:enum_next_value") {
   REQUIRE(enum_next_value(Color::RED) == Color::GREEN);
   REQUIRE(enum_next_value(Color::RED, 2) == Color::BLUE);
   REQUIRE(enum_next_value(Color::RED, 1) == Color::GREEN);
@@ -783,7 +783,7 @@ TEST_CASE("enum_next_value") {
   REQUIRE_FALSE(enum_next_value(Color::RED, 10).has_value());
 }
 
-TEST_CASE("enum_next_value_circular") {
+TEST_CASE("flags:enum_next_value_circular") {
   REQUIRE(enum_next_value_circular(Color::RED) == Color::GREEN);
   REQUIRE(enum_next_value_circular(Color::RED, 2) == Color::BLUE);
   REQUIRE(enum_next_value_circular(Color::RED, 1) == Color::GREEN);
@@ -802,7 +802,7 @@ TEST_CASE("enum_next_value_circular") {
   REQUIRE(enum_next_value_circular(Color::RED, -4) == Color::BLUE);
 }
 
-TEST_CASE("enum_prev_value") {
+TEST_CASE("flags:enum_prev_value") {
   REQUIRE(enum_prev_value(Color::BLUE) == Color::GREEN);
   REQUIRE(enum_prev_value(Color::BLUE, 2) == Color::RED);
   REQUIRE(enum_prev_value(Color::BLUE, 1) == Color::GREEN);
@@ -814,7 +814,7 @@ TEST_CASE("enum_prev_value") {
   REQUIRE_FALSE(enum_prev_value(Color::BLUE, 10).has_value());
 }
 
-TEST_CASE("enum_prev_value_circular") {
+TEST_CASE("flags:enum_prev_value_circular") {
   REQUIRE(enum_prev_value_circular(Color::RED) == Color::BLUE);
   REQUIRE(enum_prev_value_circular(Color::RED, 2) == Color::GREEN);
   REQUIRE(enum_prev_value_circular(Color::RED, 1) == Color::BLUE);
@@ -832,3 +832,7 @@ TEST_CASE("enum_prev_value_circular") {
   REQUIRE(enum_prev_value_circular(Color::RED, -3) == Color::RED);
   REQUIRE(enum_prev_value_circular(Color::RED, -4) == Color::GREEN);
 }
+
+#if defined(_MSC_VER)
+#  pragma warning(pop)
+#endif
