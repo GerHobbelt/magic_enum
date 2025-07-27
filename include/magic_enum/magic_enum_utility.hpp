@@ -102,7 +102,8 @@ template <typename E, detail::enum_subtype S = detail::subtype_v<E>>
       return enum_value<D, S>(static_cast<std::size_t>(index));
     }
   }
-  return MAGIC_ENUM_ASSERT(false), value;
+  MAGIC_ENUM_ASSERT(false && "Should never get here!");
+  return value;
 }
 
 template <typename E, detail::enum_subtype S = detail::subtype_v<E>>
@@ -130,7 +131,8 @@ template <typename E, detail::enum_subtype S = detail::subtype_v<E>>
       return enum_value<D, S>(static_cast<std::size_t>(index));
     }
   }
-  return MAGIC_ENUM_ASSERT(false), value;
+  MAGIC_ENUM_ASSERT(false && "Should never get here!");
+  return value;
 }
 
 } // namespace magic_enum
