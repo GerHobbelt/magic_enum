@@ -66,12 +66,14 @@
 #  define MAGIC_ENUM_ASSERT(...) static_cast<void>(0)
 #elif !defined(MAGIC_ENUM_ASSERT)
 # if defined(LIBASSERT_USE_MAGIC_ENUM) || (defined(__has_include) && __has_include(<libassert/config.h>))
+// to prevent #include recursion, only load the libassert header files up to the point where libassert itself loads this very same magic_enum header file:
+// this is why we don't simply `#include <libassert/assert.h>`.
 #include <libassert/config.h>
 #include <libassert/platform.hpp>
 #include <libassert/utilities.hpp>
 #include <libassert/precursor_macros.hpp>
 
-#  define MAGIC_ENUM_ASSERT(...) LIBASSERT_INVOKE((__VA_ARGS__), "MAGIC_ENUM_ASSERT", assertion, /* empty action */)
+#  define MAGIC_ENUM_ASSERT(...) LIBASSERT_DEBUG_INVOKE((__VA_ARGS__), "MAGIC_ENUM_ASSERT", assertion, /* empty action */)
 # else
 #  include <cassert>
 #  define MAGIC_ENUM_ASSERT(...) assert((__VA_ARGS__))
